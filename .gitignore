@@ -2,3 +2,4 @@ venv
 .idea
 */htmlcov
 */.coverage
+*/__pycache__
