@@ -9,7 +9,6 @@ def predict_message_mood(
     bad_thresholds: float = 0.3,
     good_thresholds: float = 0.8,
 ) -> str:
-
     prediction = model.predict(message)
     if prediction < bad_thresholds:
         return "неуд"

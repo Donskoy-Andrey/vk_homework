@@ -1,8 +1,6 @@
 import io
 import unittest
-from task2 import searcher
-
-generator = searcher("01/example.txt", ["роза", "условий", "и"])
+from filter_generator import searcher
 
 
 class TestSearch(unittest.TestCase):
@@ -34,9 +32,16 @@ class TestSearch(unittest.TestCase):
             self.output
         )
 
-    def test_empty_fileobject(self) -> None:
+    def test_empty_input(self) -> None:
         fileobject = io.StringIO("""""")
+
         self.assertEqual(
-            list(fileobject),
+            list(searcher(fileobject, ['карась', 'кубик'])),
+            []
+        )
+
+    def test_empty_output(self) -> None:
+        self.assertEqual(
+            list(searcher("example.txt", ['карась', 'кубик'])),
             []
         )
