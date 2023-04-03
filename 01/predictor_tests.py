@@ -24,6 +24,66 @@ class TestPredict(unittest.TestCase):
             predict_message_mood("Булочки и чай", self.model), "норм"
         )
 
+    def test_different_thresholds(self) -> None:
+        import numpy as np
+
+        for bad_threshold in np.arange(0.1, 0.6, 0.1):
+            self.assertEqual(
+                predict_message_mood(
+                    self.text, self.model,
+                    bad_thresholds=bad_threshold, good_thresholds=1.0
+                ),
+                "норм"
+            )
+
+        for good_threshold in np.arange(1, 1.6, 0.1):
+            self.assertEqual(
+                predict_message_mood(
+                    self.text, self.model,
+                    bad_thresholds=0.1, good_thresholds=good_threshold
+                ),
+                "норм"
+            )
+
+        for bad_threshold in np.arange(0.9, 1.5, 0.1):
+            self.assertEqual(
+                predict_message_mood(
+                    self.text, self.model,
+                    bad_thresholds=bad_threshold, good_thresholds=3.0
+                ),
+                "неуд"
+            )
+
+        for good_threshold in np.arange(0.8, 0.3, -0.1):
+            self.assertEqual(
+                predict_message_mood(
+                    self.text, self.model,
+                    bad_thresholds=0.1, good_thresholds=good_threshold
+                ),
+                "отл"
+            )
+
+        same_threshold = self.model.predict(self.text)
+        self.assertEqual(
+            predict_message_mood(
+                self.text, self.model,
+                bad_thresholds=same_threshold, good_thresholds=same_threshold
+            ),
+            "норм"
+        )
+
+    @patch("predictor.SomeModel.predict")
+    def test_all_variant_of_answers(self, mock):
+        mock.side_effect = [i * 0.1 for i in range(0, 14, 2)]
+        results = ["неуд", "неуд", "норм", "норм", "норм", "отл", "отл"]
+
+        for result in results:
+            self.assertEqual(
+                predict_message_mood(
+                    self.text, self.model
+                ), result
+            )
+
     @patch("predictor.SomeModel.predict")
     def test_boundary(self, mock) -> None:
         mock.side_effect = [0.3, 0.8]
