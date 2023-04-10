@@ -12,41 +12,111 @@ class TestParser(unittest.TestCase):
         self.base_keywords = ["word2"]
         self.base_keyword_callback = print
 
-    def test_empty_json_str(self):
-        self.assertEqual(
+    def test_callback_1(self):
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
             parse_json(
+                json_str=self.base_json,
                 required_fields=self.base_required_fields,
                 keywords=self.base_keywords,
-                keyword_callback=self.base_keyword_callback
-            ), None
+                keyword_callback=mock_keyword_callback
+            )
+        self.assertEqual(
+            mock_keyword_callback.call_args_list,
+            [mock.call("word2")]
         )
+
+    def test_callback_2(self):
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+            parse_json(
+                json_str=self.base_json,
+                required_fields=["key1", "key2"],
+                keywords=["word2", "word3"],
+                keyword_callback=mock_keyword_callback
+            )
+        self.assertEqual(
+            mock_keyword_callback.call_args_list,
+            [mock.call("word2"), mock.call("word2"), mock.call("word3")]
+        )
+
+    def test_callback_3(self):
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+            parse_json(
+                json_str='{"cat": "cat1 cat3 cat3 cat4", '
+                         '"dog": "dog1 dog2 dog3",'
+                         '"mouse": "mouse1"}',
+                required_fields=["cat", "dog"],
+                keywords=["cat3", "cat4", "dog1"],
+                keyword_callback=mock_keyword_callback
+            )
+        print(mock_keyword_callback.call_args_list,)
+        self.assertEqual(
+            mock_keyword_callback.call_args_list,
+            [mock.call('cat3'), mock.call('cat3'),
+             mock.call('cat4'), mock.call('dog1')]
+        )
+
+    def test_empty_json_str(self):
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+
+            self.assertEqual(
+                parse_json(
+                    required_fields=self.base_required_fields,
+                    keywords=self.base_keywords,
+                    keyword_callback=mock_keyword_callback
+                ), None
+            )
+
+            self.assertEqual(
+                mock_keyword_callback.call_args_list, []
+            )
 
     def test_empty_required_fields(self):
-        self.assertEqual(
-            parse_json(
-                json_str=self.base_json,
-                keywords=self.base_keywords,
-                keyword_callback=self.base_keyword_callback
-            ), None
-        )
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+            self.assertEqual(
+                parse_json(
+                    json_str=self.base_json,
+                    keywords=self.base_keywords,
+                    keyword_callback=self.base_keyword_callback
+                ), None
+            )
+
+            self.assertEqual(
+                mock_keyword_callback.call_args_list, []
+            )
 
     def test_empty_keywords(self):
-        self.assertEqual(
-            parse_json(
-                json_str=self.base_json,
-                required_fields=self.base_required_fields,
-                keyword_callback=self.base_keyword_callback
-            ), None
-        )
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+            self.assertEqual(
+                parse_json(
+                    json_str=self.base_json,
+                    required_fields=self.base_required_fields,
+                    keyword_callback=self.base_keyword_callback
+                ), None
+            )
+
+            self.assertEqual(
+                mock_keyword_callback.call_args_list, []
+            )
 
     def test_empty_keyword_callback(self):
-        self.assertEqual(
-            parse_json(
-                json_str=self.base_json,
-                required_fields=self.base_required_fields,
-                keywords=self.base_keywords
-            ), None
-        )
+        with mock.patch("parser.print") \
+                as mock_keyword_callback:
+            self.assertEqual(
+                parse_json(
+                    json_str=self.base_json,
+                    required_fields=self.base_required_fields,
+                    keywords=self.base_keywords
+                ), None
+            )
+            self.assertEqual(
+                mock_keyword_callback.call_args_list, []
+            )
 
     def test_keyword_callback_count_1(self):
         with mock.patch("parser.print") \
@@ -58,6 +128,10 @@ class TestParser(unittest.TestCase):
                 keyword_callback=mock_keyword_callback
             ),
 
+            self.assertEqual(
+                mock_keyword_callback.call_args_list,
+                [mock.call("word2")]
+            )
             self.assertEqual(
                 mock_keyword_callback.call_count,
                 1
@@ -72,6 +146,11 @@ class TestParser(unittest.TestCase):
                 keywords=self.base_keywords,
                 keyword_callback=mock_keyword_callback
             ),
+
+            self.assertEqual(
+                mock_keyword_callback.call_args_list,
+                []
+            )
 
             self.assertEqual(
                 mock_keyword_callback.call_count,
