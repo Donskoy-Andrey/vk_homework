@@ -25,4 +25,4 @@ def parse_json(
         if field in json_doc:
             for index, word in enumerate(json_doc.get(field)):
                 if word in keywords:
-                    keyword_callback(json_doc.get(field)[index])
+                    keyword_callback(field, word)

@@ -23,7 +23,7 @@ class TestParser(unittest.TestCase):
             )
         self.assertEqual(
             mock_keyword_callback.call_args_list,
-            [mock.call("word2")]
+            [mock.call("key1", "word2")]
         )
 
     def test_callback_2(self):
@@ -37,7 +37,9 @@ class TestParser(unittest.TestCase):
             )
         self.assertEqual(
             mock_keyword_callback.call_args_list,
-            [mock.call("word2"), mock.call("word2"), mock.call("word3")]
+            [mock.call("key1", "word2"),
+             mock.call("key2", "word2"),
+             mock.call("key2", "word3")]
         )
 
     def test_callback_3(self):
@@ -51,11 +53,10 @@ class TestParser(unittest.TestCase):
                 keywords=["cat3", "cat4", "dog1"],
                 keyword_callback=mock_keyword_callback
             )
-        print(mock_keyword_callback.call_args_list,)
         self.assertEqual(
             mock_keyword_callback.call_args_list,
-            [mock.call('cat3'), mock.call('cat3'),
-             mock.call('cat4'), mock.call('dog1')]
+            [mock.call("cat", "cat3"), mock.call("cat", "cat3"),
+             mock.call("cat", "cat4"), mock.call("dog", "dog1")]
         )
 
     def test_empty_json_str(self):
@@ -130,7 +131,7 @@ class TestParser(unittest.TestCase):
 
             self.assertEqual(
                 mock_keyword_callback.call_args_list,
-                [mock.call("word2")]
+                [mock.call("key1", "word2")]
             )
             self.assertEqual(
                 mock_keyword_callback.call_count,
@@ -162,10 +163,16 @@ class TestParser(unittest.TestCase):
         from faker import Faker
         fake = Faker(locale="Ru_ru")
 
-        results = [
+        results_fields = [
+            "address",
+            "text",
+            "text"
+        ]
+
+        results_keywords = [
             None,
-            ("привлекать", ),
-            ("торопливый", )
+            "привлекать",
+            "торопливый"
         ]
 
         for i, seed in enumerate([1, 13, 42]):
@@ -187,6 +194,7 @@ class TestParser(unittest.TestCase):
             random.seed(seed)
             required_fields = random.sample(list(data.keys()), k=3)
             keywords = ["Гвинея", "торопливый", "набор", "привлекать"]
+
             with mock.patch("parser_tests.print") \
                     as mock_keyword_callback:
 
@@ -196,10 +204,11 @@ class TestParser(unittest.TestCase):
                         keywords=keywords,
                         keyword_callback=mock_keyword_callback
                 )
+
             if mock_keyword_callback.call_count > 0:
                 self.assertEqual(
                     mock_keyword_callback.call_args.args,
-                    results[i]
+                    (results_fields[i], results_keywords[i])
                 )
             else:
                 self.assertEqual(
@@ -207,6 +216,7 @@ class TestParser(unittest.TestCase):
                         json_str=self.base_json,
                         required_fields=self.base_required_fields,
                         keywords=self.base_keywords
-                    ), results[i]
+                    ),
+                    results_keywords[i]
                 )
 
