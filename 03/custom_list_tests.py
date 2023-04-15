@@ -158,3 +158,35 @@ class TestCustomList(unittest.TestCase):
             custom_list1 != custom_list2,
             True
         )
+
+    def test_not_changing_with_list(self):
+        custom_list1 = CustomList([1, 2, 3])
+        custom_list2 = custom_list1 + [2, 3, 5]
+
+        self.assertEqual(
+            custom_list1,
+            CustomList([1, 2, 3])
+        )
+
+        custom_list2 = custom_list1 - [2, 3, 5]
+
+        self.assertEqual(
+            custom_list1,
+            CustomList([1, 2, 3])
+        )
+
+    def test_not_changing_with_custom_list(self):
+        custom_list1 = CustomList([1, 2, 3])
+        custom_list2 = custom_list1 + CustomList([2, 3, 5])
+
+        self.assertEqual(
+            custom_list1,
+            CustomList([1, 2, 3])
+        )
+
+        custom_list2 = custom_list1 - CustomList([2, 3, 5])
+
+        self.assertEqual(
+            custom_list1,
+            CustomList([1, 2, 3])
+        )
