@@ -5,6 +5,7 @@ from lru_cache import LRUCache, Node
 class TestLruCache(unittest.TestCase):
     def setUp(self):
         self.cache = LRUCache(2)
+        self.cache_limit_one = LRUCache(1)
         self.another_cache = LRUCache()
         self.another_cache.set("existent key 1", 123)
         self.another_cache.set("existent key 2", "text")
@@ -69,10 +70,43 @@ class TestLruCache(unittest.TestCase):
         self.cache.set("k1", "HelloWorld")
 
         self.assertEqual(
-            self.cache.storage["k1"].value, "HelloWorld"
+            self.cache.get("k1"), "HelloWorld"
         )
 
     def test_unhashable_error(self):
         self.assertRaises(
             TypeError, lambda: self.cache.set(list(), 'value')
+        )
+
+    def test_limit_one(self):
+        self.cache_limit_one.set("k1", "val1")
+        self.cache_limit_one.set("k2", "val2")
+        self.cache_limit_one.set("k3", "val3")
+
+        self.assertEqual(
+            len(self.cache_limit_one.storage), 1
+        )
+        self.assertIsNone(
+            self.cache_limit_one.get("k1")
+        )
+        self.assertIsNone(
+            self.cache_limit_one.get("k2")
+        )
+        self.assertEqual(
+            self.cache_limit_one.get("k3"), "val3"
+        )
+
+    def test_rewrite_existed_value(self):
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+        self.cache.set("k1", "val3")
+
+        self.assertEqual(
+            len(self.cache.storage), 2
+        )
+        self.assertEqual(
+            self.cache.get("k1"), "val3"
+        )
+        self.assertEqual(
+            self.cache.get("k2"), "val2"
         )
