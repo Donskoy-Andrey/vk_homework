@@ -110,3 +110,25 @@ class TestLruCache(unittest.TestCase):
         self.assertEqual(
             self.cache.get("k2"), "val2"
         )
+
+    def test_change_value(self):
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+        self.cache.set("k1", "new_val1")
+
+        self.cache.set("k3", "val3")
+
+        self.assertEqual(self.cache.get("k3"), "val3")
+        self.assertEqual(self.cache.get("k2"), None)
+        self.assertEqual(self.cache.get("k1"), "new_val1")
+
+    def test_change_order_get(self):
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+        _ = self.cache.get("k1")
+
+        self.cache.set("k3", "val3")
+
+        self.assertEqual(self.cache.get("k3"), "val3")
+        self.assertEqual(self.cache.get("k2"), None)
+        self.assertEqual(self.cache.get("k1"), "val1")
