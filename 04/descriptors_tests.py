@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock
 from descriptors import Data
 
 
@@ -35,3 +36,22 @@ class TestDescriptor(unittest.TestCase):
         with self.assertRaises(ValueError) as error:
             cls = Data(num=3, name="yoghurt", price=-12)
         self.assertEqual(error.exception.args, ("The value is not a positive integer.",))
+
+    def test_delete_method(self):
+        with mock.patch("descriptors.delattr") as mocker:
+            cls = Data(num=3, name="yoghurt", price=12)
+
+            del cls.num
+            del cls.name
+            del cls.price
+
+            self.assertEqual(mocker.call_count, 3)
+
+        cls = Data(num=3, name="yoghurt", price=12)
+        del cls.num
+        del cls.name
+        del cls.price
+
+        self.assertIsNone(cls.num)
+        self.assertIsNone(cls.name)
+        self.assertIsNone(cls.price)
