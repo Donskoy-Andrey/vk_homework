@@ -33,6 +33,12 @@ class TestCustomClass(unittest.TestCase):
         self.assertEqual(self.custom_class.custom_line(), 100)
         self.assertEqual(self.another_custom_class.custom_line(), 100)
 
+        self.assertEqual("custom_line" in self.custom_class.__dir__(), True)
+        self.assertEqual("line" in self.custom_class.__dir__(), False)
+
+        self.assertEqual("val" in self.custom_class.__dir__(), False)
+        self.assertEqual("custom_val" in self.custom_class.__dir__(), True)
+
     def test_str(self):
         self.assertEqual(str(self.custom_class), "Custom_by_metaclass")
         self.assertEqual(str(self.another_custom_class), "Custom_by_metaclass")

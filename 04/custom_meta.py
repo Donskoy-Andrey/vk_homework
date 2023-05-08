@@ -2,12 +2,12 @@ from typing import Any
 
 
 class CustomMeta(type):
-
     def setter(cls, name: str, val: Any):
-        name = f"custom_{name}"
+        if not name.startswith("__") and not name.endswith("__"):
+            name = f"custom_{name}"
         cls.__dict__[name] = val
 
-    def __init__(cls, name, bases, classdict: dict, **kwargs):
+    def __init__(mcs, name, bases, classdict: dict, **kwargs):
         super().__init__(name, bases, classdict, **kwargs)
 
     def __call__(cls, *args, **kwargs):
@@ -16,7 +16,6 @@ class CustomMeta(type):
     def __new__(mcs, name, bases, classdict: dict, **kwargs):
 
         new_classdict = dict()
-        new_classdict["__setattr__"] = mcs.setter
 
         for key, value in classdict.items():
 
@@ -25,6 +24,7 @@ class CustomMeta(type):
             else:
                 new_classdict[key] = value
 
+        new_classdict["__setattr__"] = mcs.setter
         cls = super().__new__(mcs, name, bases, new_classdict, **kwargs)
 
         return cls
