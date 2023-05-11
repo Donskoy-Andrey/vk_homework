@@ -1,9 +1,14 @@
 import unittest
 from unittest import mock
 from unittest.mock import call
-from server import Master, Worker, parse_url
+from server import Master
 from client import Client
 import socket
+
+
+class FakeGetResult:
+    def __init__(self):
+        self.text = r"<html>Hello world!<\html>"
 
 
 class TestServer(unittest.TestCase):
@@ -33,15 +38,17 @@ class TestServer(unittest.TestCase):
             client.send(self.url.encode('utf-8'))
 
             with mock.patch('server.print') as fake:
-                try:
-                    master.start_server()
-                except Exception:
-                    pass
-                finally:
-                    self.assertEqual(
-                        [call(f'Server read: {self.url}\nNumber of processed URL: 1\n')],
-                        fake.call_args_list
-                    )
+                with mock.patch("server.requests.get") as fake_get:
+                    fake_get.return_value = FakeGetResult()
+                    try:
+                        master.start_server()
+                    except Exception:
+                        pass
+                    finally:
+                        self.assertEqual(
+                            [call(f'Server read: {self.url}\nNumber of processed URL: 1\n')],
+                            fake.call_args_list
+                        )
         master.close()
 
     def test_timeout(self):
@@ -52,9 +59,6 @@ class TestServer(unittest.TestCase):
 
 
 class TestClient(unittest.TestCase):
-    def setUp(self):
-        self.conn1, self.conn2 = socket.socketpair()
-        self.worker = Worker(target=parse_url, args=(self.conn1, 3))
 
     def test_client_initial_params(self):
         client = Client()
@@ -82,5 +86,5 @@ class TestClient(unittest.TestCase):
 
             self.assertEqual(
                 len(*threads_fake.call_args_list[0][0][0]),
-                100
+                9
             )

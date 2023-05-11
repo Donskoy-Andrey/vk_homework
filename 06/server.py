@@ -2,9 +2,9 @@ import argparse
 import socket
 import threading
 import re
+from collections import Counter
 import requests
 from bs4 import BeautifulSoup
-from collections import Counter
 import nltk
 from nltk.corpus import stopwords
 
@@ -12,7 +12,6 @@ nltk.download("stopwords")
 en_stops = set(stopwords.words('english'))
 
 TIMELIMIT = 10
-urls_counter = 0
 
 
 class Worker(threading.Thread):
@@ -20,24 +19,31 @@ class Worker(threading.Thread):
         super().__init__(target=target, args=args)
 
 
-def parse_url(conn, top_size: int):
-    global urls_counter
-    urls_counter += 1
-    url = conn.recv(1024).decode()
-    print(f"Server read: {url}\nNumber of processed URL: {urls_counter}\n")
+def parse_url(conn, top_size: int, cls: "Master", semaphore):
+    with semaphore:
+        sem = threading.Semaphore(1)
+        with sem:
+            cls.urls_counter += 1
+        url = conn.recv(1024).decode()
+        print(f"Server read: {url}\nNumber of processed URL: {cls.urls_counter}\n")
 
-    html = requests.get(url=url).text
-    text = BeautifulSoup(html, "lxml").text
-    words = re.sub(r"<.*?>", "", text)
-    words = re.sub(rf"[^a-zA-Z\s]+", "", words)
-    words = words.split()
-    words = [word for word in words if word.lower() not in en_stops]
+        try:
+            html = requests.get(url=url, timeout=5).text
+            text = BeautifulSoup(html, "lxml").text
+            words = re.sub(r"<.*?>", "", text)
+            words = re.sub(r"[^a-zA-Z\s]+", "", words)
+            words = words.split()
+            words = [word for word in words if word.lower() not in en_stops]
 
-    top_words = dict(
-        Counter(words).most_common(top_size)
-    )
-    conn.send(f"{url}: {top_words}.\n".encode('utf-8'))
-    conn.close()
+            top_words = dict(
+                Counter(words).most_common(top_size)
+            )
+            conn.send(f"{url}: {top_words}.\n".encode('utf-8'))
+            conn.close()
+        except ImportError:
+            print(f"Couldn't parse data from {url}.")
+        except ValueError:
+            print(f"Couldn't read data from {url}.")
 
 
 class Master:
@@ -49,14 +55,24 @@ class Master:
         self.server.bind(("127.0.0.1", 8080))
         self.server.listen(5)
         self.top_size = top_size
+        self.urls_counter = 0
 
     def start_server(self):
         while True:
-            for worker_index in range(self.workers_count):
-                conn, address = self.server.accept()
+            semaphore = threading.Semaphore(
+                self.workers_count
+            )
+            for _ in range(self.workers_count):
+                conn, _ = self.server.accept()
 
                 worker = Worker(
-                    target=parse_url, args=(conn, self.top_size)
+                    target=parse_url,
+                    args=(
+                        conn,
+                        self.top_size,
+                        self,
+                        semaphore
+                    )
                 )
                 worker.start()
 
@@ -76,12 +92,9 @@ def main():
 
     try:
         server.start_server()
-    except TimeoutError as err:
-        print("Time limit. Server stopped.")
-        global urls_counter
-        urls_counter = 0
-    finally:
+    except TimeoutError as exs:
         server.close()
+        raise KeyboardInterrupt("Time limit. Server stopped.") from exs
 
 
 if __name__ == "__main__":

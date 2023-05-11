@@ -10,15 +10,19 @@ class Client:
         self.urls_path = urls_path  # file with urls
 
     def start_client(self):
-        with open(self.urls_path, "r") as file:
-            urls = [url.strip() for url in file.readlines()]
+        with open(self.urls_path, "r", encoding="utf-8") as file:
+            while True:
+                lines = file.readlines(500)
+                if not lines:
+                    break
+                urls = [url.strip() for url in lines]
 
-            chunk_size = len(urls) // self.threads_count
-            url_chunks = [
-                urls[i: i + chunk_size]
-                for i in range(0, len(urls), chunk_size)
-            ]
-        self.run_threads(url_chunks)
+                chunk_size = len(urls) // self.threads_count
+                url_chunks = [
+                    urls[i: i + chunk_size]
+                    for i in range(0, len(urls), chunk_size)
+                ]
+                self.run_threads(url_chunks)
 
     def run_threads(self, url_chunks: list):
         threads = []
@@ -48,13 +52,16 @@ class Client:
 
     def send_urls(self, urls: list):
         for url in urls:
-            self.send_url(url)
+            try:
+                self.send_url(url)
+            except ValueError:
+                print("Data sending error.")
 
 
 def main():
     parser = argparse.ArgumentParser(description="client script")
-    parser.add_argument("-m", dest="threads", default=10, type=int)
-    parser.add_argument("-u", dest="urls", default="urls.txt", type=str)
+    parser.add_argument("-m", dest="threads", default=1, type=int)
+    parser.add_argument("-u", dest="urls_path", default="urls.txt", type=str)
     args = parser.parse_args()
     threads = args.threads
     urls_path = args.urls_path
