@@ -1,0 +1,8 @@
+DEBUG	2023-05-13 09:37:17,663 : [set] : Value by key k1 is not in cache.
+DEBUG	2023-05-13 09:37:17,663 : [set] : Value by key k2 is not in cache.
+DEBUG	2023-05-13 09:37:17,663 : [set] : Value by key k3 is not in cache.
+DEBUG	2023-05-13 09:37:17,663 : [set] : Value by key k4 is not in cache.
+INFO	2023-05-13 09:37:17,663 : [set] : Storage of cache is full. Remove last used element 'k1'.
+DEBUG	2023-05-13 09:37:17,663 : [set] : Value by key k2 is in cache.
+WARNING	2023-05-13 09:37:17,663 : [get] : Key k1 is not in cache.
+DEBUG	2023-05-13 09:37:17,663 : [get] : Get value by key (k2) from cache

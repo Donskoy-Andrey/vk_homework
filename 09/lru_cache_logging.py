@@ -1,0 +1,73 @@
+import logging
+import argparse
+from dataclasses import dataclass
+from lru_cache import LRUCache
+
+
+@dataclass()
+class CustomFilterEvenNumber(logging.Filter):
+    """
+    Leave logs with an even number of elements.
+    """
+    def __init__(self):
+        super().__init__()
+
+    def filter(self, record):
+        if len(record.getMessage()) % 2 == 0:
+            return record
+        return None
+
+
+def logger_activate(stdout: bool, custom_filter: bool):
+    formatter = logging.Formatter(
+        "%(levelname)s\t%(asctime)s : %(message)s"
+    )
+    if stdout:
+        handler = logging.StreamHandler()
+    else:
+        handler = logging.FileHandler("lru.log")
+
+    handler.setLevel(logging.DEBUG)
+    handler.setFormatter(formatter)
+
+    if custom_filter:
+        handler.addFilter(CustomFilterEvenNumber())
+
+    logger_object = logging.getLogger()
+    logger_object.addHandler(handler)
+    logger_object.setLevel(logging.DEBUG)
+    return logger_object
+
+
+def main():
+    parser = argparse.ArgumentParser(description="logger script")
+    parser.add_argument(
+        "-s", "--stdout", action="store_true",
+        dest="stdout", help="log to the terminal"
+    )
+    parser.add_argument(
+        "-f", "--filter", action="store_true",
+        dest="filter", help="use specific filter"
+    )
+
+    arguments = parser.parse_args()
+    use_filter = arguments.filter
+    use_stdout = arguments.stdout
+
+    logger = logger_activate(use_stdout, use_filter)
+
+    lru = LRUCache(3, logger=logger)
+    lru.set("k1", "val1")  # set отсутствующего ключа
+    lru.set("k2", "val2")  # set отсутствующего ключа
+    lru.set("k3", "val3")  # set отсутствующего ключа
+    lru.set("k4", "val3")  # set отсутствующего ключа, когда достигнута ёмкость
+    lru.set("k2", "new_val2")  # set существующего ключа
+
+    lru.get("k1")  # get отсутствующего ключа
+    lru.get("k2")  # get существующего ключа
+
+    # lru.set([1, 2, 3], [1, 2, 3])  # error с нехэшируемым типом
+
+
+if __name__ == "__main__":
+    main()
