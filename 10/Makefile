@@ -1,29 +1,45 @@
 VENV := venv
-PYTHON := python3
+PYTHON := $(VENV)/bin/python3
 PIP := $(VENV)/bin/pip
 SETUP := $(PYTHON) setup.py
 SHAPE := 20000
+SHELL := /bin/bash
 
-all: venv deps install run clean
+all: venv activate deps install run clean
 
 venv:
-	@echo "\n============ Create Virtual Environment: ============\n"
-	$(PYTHON) -m venv $(VENV)
+	@echo "============ Create Virtual Environment: ============"
+	@echo
+	python3 -m venv $(VENV)
+activate: venv
+	source ./$(VENV)/bin/activate
+deps: activate
+	@echo
+	@echo "============    Install Dependencies:    ============"
+	@echo
 	$(PIP) install --upgrade pip
-deps:
-	@echo "\n============    Install Dependencies:    ============\n"
 	$(PIP) install -r requirements.txt
-install:
-	@echo "\n============        Install Setup:       ============\n"
+install: deps
+	@echo
+	@echo "============        Install Setup:       ============"
+	@echo
 	$(SETUP) install
-run:
-	@echo "\n============         Start Tests:        ============\n"
+run: install
+	@echo
+	@echo "============         Start Tests:        ============"
+	@echo
 	$(PYTHON) -m unittest cjson_tests.py
-	@echo "\n============      Generate JSON file:    ============\n"
+	@echo
+	@echo "============      Generate JSON file:    ============"
+	@echo
 	$(PYTHON) json_generator.py $(SHAPE)
 	@echo "Created file with JSON strings (count = $(SHAPE))"
-	@echo "\n============    Start Test Performance:  ============\n"
+	@echo
+	@echo "============    Start Test Performance:  ============"
+	@echo
 	$(PYTHON) perform.py
-clean:
-	@echo "\n============           Clean:            ============\n"
+clean: run
+	@echo
+	@echo "============           Clean:            ============"
+	@echo
 	rm -rf build dist *.egg-info __pycache__ venv _trial_temp json_database.txt
