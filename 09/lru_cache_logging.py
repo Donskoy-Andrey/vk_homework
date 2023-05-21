@@ -15,7 +15,7 @@ class CustomFilterEvenNumber(logging.Filter):
 
 
 def logger_activate(stdout: bool, custom_filter: bool):
-    logger_to_stdout = None
+    logger = logging.getLogger()
 
     if stdout:
         formatter_to_stdout = logging.Formatter(
@@ -29,9 +29,8 @@ def logger_activate(stdout: bool, custom_filter: bool):
         if custom_filter:
             handler_to_stdout.addFilter(CustomFilterEvenNumber())
 
-        logger_to_stdout = logging.getLogger()
-        logger_to_stdout.addHandler(handler_to_stdout)
-        logger_to_stdout.setLevel(logging.DEBUG)
+        logger.addHandler(handler_to_stdout)
+        logger.setLevel(logging.DEBUG)
 
     formatter_to_file = logging.Formatter(
         "%(levelname)s\t%(asctime)s : %(message)s"
@@ -44,11 +43,10 @@ def logger_activate(stdout: bool, custom_filter: bool):
     if custom_filter:
         handler_to_file.addFilter(CustomFilterEvenNumber())
 
-    logger_to_file = logging.getLogger()
-    logger_to_file.addHandler(handler_to_file)
-    logger_to_file.setLevel(logging.DEBUG)
+    logger.addHandler(handler_to_file)
+    logger.setLevel(logging.DEBUG)
 
-    return logger_to_file, logger_to_stdout
+    return logger
 
 
 def main():
@@ -66,9 +64,9 @@ def main():
     use_filter = arguments.filter
     use_stdout = arguments.stdout
 
-    logger_to_file, logger_to_stdout = logger_activate(use_stdout, use_filter)
+    logger = logger_activate(use_stdout, use_filter)
 
-    lru = LRUCache(3, logger=(logger_to_file, logger_to_stdout))
+    lru = LRUCache(3, logger=logger)
     lru.set("k1", "val1")  # set отсутствующего ключа
     lru.set("k2", "val2")  # set отсутствующего ключа
     lru.set("k3", "val3")  # set отсутствующего ключа

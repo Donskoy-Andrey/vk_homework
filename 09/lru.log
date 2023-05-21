@@ -1,69 +1,8 @@
-DEBUG	2023-05-21 16:57:20,042 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:20,042 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:20,042 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:20,042 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 16:57:20,042 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 16:57:20,042 : [set] : Value by key k2 is in cache.
-DEBUG	2023-05-21 16:57:20,042 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 16:57:23,734 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:23,734 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:23,734 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:23,734 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 16:57:23,734 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 16:57:23,734 : [set] : Value by key k2 is in cache.
-WARNING	2023-05-21 16:57:23,734 : [get] : Key k1 is not in cache.
-DEBUG	2023-05-21 16:57:23,734 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k4 is not in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 16:57:28,381 : [set] : Storage of cache is full. Remove last used element 'k1'.
-INFO	2023-05-21 16:57:28,381 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k2 is in cache.
-DEBUG	2023-05-21 16:57:28,381 : [set] : Value by key k2 is in cache.
-WARNING	2023-05-21 16:57:28,381 : [get] : Key k1 is not in cache.
-WARNING	2023-05-21 16:57:28,382 : [get] : Key k1 is not in cache.
-DEBUG	2023-05-21 16:57:28,382 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 16:57:28,382 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 16:57:31,269 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:31,269 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 16:57:31,269 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:31,269 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 16:57:31,269 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:31,270 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 16:57:31,270 : [set] : Value by key k4 is not in cache.
-DEBUG	2023-05-21 16:57:31,270 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 16:57:31,270 : [set] : Storage of cache is full. Remove last used element 'k1'.
-INFO	2023-05-21 16:57:31,270 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 16:57:31,270 : [set] : Value by key k2 is in cache.
-DEBUG	2023-05-21 16:57:31,270 : [set] : Value by key k2 is in cache.
-DEBUG	2023-05-21 16:57:31,270 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 16:57:31,270 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 17:00:26,397 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 17:00:26,397 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 17:00:26,397 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 17:00:26,397 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 17:00:26,397 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 17:00:26,397 : [set] : Value by key k2 is in cache.
-WARNING	2023-05-21 17:00:26,397 : [get] : Key k1 is not in cache.
-DEBUG	2023-05-21 17:00:26,397 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k1 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k2 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k3 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k4 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k4 is not in cache.
-INFO	2023-05-21 17:00:28,540 : [set] : Storage of cache is full. Remove last used element 'k1'.
-INFO	2023-05-21 17:00:28,540 : [set] : Storage of cache is full. Remove last used element 'k1'.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k2 is in cache.
-DEBUG	2023-05-21 17:00:28,540 : [set] : Value by key k2 is in cache.
-WARNING	2023-05-21 17:00:28,540 : [get] : Key k1 is not in cache.
-WARNING	2023-05-21 17:00:28,540 : [get] : Key k1 is not in cache.
-DEBUG	2023-05-21 17:00:28,540 : [get] : Get value by key (k2) from cache
-DEBUG	2023-05-21 17:00:28,540 : [get] : Get value by key (k2) from cache
+DEBUG	2023-05-21 17:04:59,662 : [set] : Value by key k1 is not in cache.
+DEBUG	2023-05-21 17:04:59,662 : [set] : Value by key k2 is not in cache.
+DEBUG	2023-05-21 17:04:59,663 : [set] : Value by key k3 is not in cache.
+DEBUG	2023-05-21 17:04:59,663 : [set] : Value by key k4 is not in cache.
+INFO	2023-05-21 17:04:59,663 : [set] : Storage of cache is full. Remove last used element 'k1'.
+DEBUG	2023-05-21 17:04:59,663 : [set] : Value by key k2 is in cache.
+WARNING	2023-05-21 17:04:59,663 : [get] : Key k1 is not in cache.
+DEBUG	2023-05-21 17:04:59,663 : [get] : Get value by key (k2) from cache
