@@ -6,3 +6,26 @@ INFO	2023-05-21 17:04:59,663 : [set] : Storage of cache is full. Remove last use
 DEBUG	2023-05-21 17:04:59,663 : [set] : Value by key k2 is in cache.
 WARNING	2023-05-21 17:04:59,663 : [get] : Key k1 is not in cache.
 DEBUG	2023-05-21 17:04:59,663 : [get] : Get value by key (k2) from cache
+DEBUG	2023-05-21 17:06:03,972 : [set] : Value by key k1 is not in cache.
+DEBUG	2023-05-21 17:06:03,972 : [set] : Value by key k2 is not in cache.
+DEBUG	2023-05-21 17:06:03,972 : [set] : Value by key k3 is not in cache.
+DEBUG	2023-05-21 17:06:03,972 : [set] : Value by key k4 is not in cache.
+INFO	2023-05-21 17:06:03,972 : [set] : Storage of cache is full. Remove last used element 'k1'.
+DEBUG	2023-05-21 17:06:03,972 : [set] : Value by key k2 is in cache.
+WARNING	2023-05-21 17:06:03,972 : [get] : Key k1 is not in cache.
+DEBUG	2023-05-21 17:06:03,972 : [get] : Get value by key (k2) from cache
+DEBUG	2023-05-21 17:06:05,668 : [set] : Value by key k1 is not in cache.
+DEBUG	2023-05-21 17:06:05,668 : [set] : Value by key k2 is not in cache.
+DEBUG	2023-05-21 17:06:05,668 : [set] : Value by key k3 is not in cache.
+DEBUG	2023-05-21 17:06:05,668 : [set] : Value by key k4 is not in cache.
+INFO	2023-05-21 17:06:05,668 : [set] : Storage of cache is full. Remove last used element 'k1'.
+DEBUG	2023-05-21 17:06:05,668 : [set] : Value by key k2 is in cache.
+WARNING	2023-05-21 17:06:05,668 : [get] : Key k1 is not in cache.
+DEBUG	2023-05-21 17:06:05,668 : [get] : Get value by key (k2) from cache
+DEBUG	2023-05-21 17:06:09,365 : [set] : Value by key k1 is not in cache.
+DEBUG	2023-05-21 17:06:09,365 : [set] : Value by key k2 is not in cache.
+DEBUG	2023-05-21 17:06:09,365 : [set] : Value by key k3 is not in cache.
+DEBUG	2023-05-21 17:06:09,365 : [set] : Value by key k4 is not in cache.
+INFO	2023-05-21 17:06:09,365 : [set] : Storage of cache is full. Remove last used element 'k1'.
+DEBUG	2023-05-21 17:06:09,365 : [set] : Value by key k2 is in cache.
+DEBUG	2023-05-21 17:06:09,366 : [get] : Get value by key (k2) from cache

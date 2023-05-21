@@ -1,6 +1,5 @@
 from typing import Any
 from collections.abc import Hashable
-import logging
 
 
 class Node:

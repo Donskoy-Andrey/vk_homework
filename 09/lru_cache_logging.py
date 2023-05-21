@@ -16,6 +16,7 @@ class CustomFilterEvenNumber(logging.Filter):
 
 def logger_activate(stdout: bool, custom_filter: bool):
     logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 
     if stdout:
         formatter_to_stdout = logging.Formatter(
@@ -30,7 +31,6 @@ def logger_activate(stdout: bool, custom_filter: bool):
             handler_to_stdout.addFilter(CustomFilterEvenNumber())
 
         logger.addHandler(handler_to_stdout)
-        logger.setLevel(logging.DEBUG)
 
     formatter_to_file = logging.Formatter(
         "%(levelname)s\t%(asctime)s : %(message)s"
@@ -44,7 +44,6 @@ def logger_activate(stdout: bool, custom_filter: bool):
         handler_to_file.addFilter(CustomFilterEvenNumber())
 
     logger.addHandler(handler_to_file)
-    logger.setLevel(logging.DEBUG)
 
     return logger
 
