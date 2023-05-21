@@ -1,16 +1,12 @@
 import logging
 import argparse
-from dataclasses import dataclass
 from lru_cache import LRUCache
 
 
-@dataclass()
 class CustomFilterEvenNumber(logging.Filter):
     """
     Leave logs with an even number of elements.
     """
-    def __init__(self):
-        super().__init__()
 
     def filter(self, record):
         if len(record.getMessage()) % 2 == 0:
@@ -19,24 +15,40 @@ class CustomFilterEvenNumber(logging.Filter):
 
 
 def logger_activate(stdout: bool, custom_filter: bool):
-    formatter = logging.Formatter(
+    logger_to_stdout = None
+
+    if stdout:
+        formatter_to_stdout = logging.Formatter(
+            "%(levelname)s\t : %(message)s"
+        )
+
+        handler_to_stdout = logging.StreamHandler()
+        handler_to_stdout.setLevel(logging.DEBUG)
+        handler_to_stdout.setFormatter(formatter_to_stdout)
+
+        if custom_filter:
+            handler_to_stdout.addFilter(CustomFilterEvenNumber())
+
+        logger_to_stdout = logging.getLogger()
+        logger_to_stdout.addHandler(handler_to_stdout)
+        logger_to_stdout.setLevel(logging.DEBUG)
+
+    formatter_to_file = logging.Formatter(
         "%(levelname)s\t%(asctime)s : %(message)s"
     )
-    if stdout:
-        handler = logging.StreamHandler()
-    else:
-        handler = logging.FileHandler("lru.log")
 
-    handler.setLevel(logging.DEBUG)
-    handler.setFormatter(formatter)
+    handler_to_file = logging.FileHandler("lru.log")
+    handler_to_file.setLevel(logging.DEBUG)
+    handler_to_file.setFormatter(formatter_to_file)
 
     if custom_filter:
-        handler.addFilter(CustomFilterEvenNumber())
+        handler_to_file.addFilter(CustomFilterEvenNumber())
 
-    logger_object = logging.getLogger()
-    logger_object.addHandler(handler)
-    logger_object.setLevel(logging.DEBUG)
-    return logger_object
+    logger_to_file = logging.getLogger()
+    logger_to_file.addHandler(handler_to_file)
+    logger_to_file.setLevel(logging.DEBUG)
+
+    return logger_to_file, logger_to_stdout
 
 
 def main():
@@ -54,9 +66,9 @@ def main():
     use_filter = arguments.filter
     use_stdout = arguments.stdout
 
-    logger = logger_activate(use_stdout, use_filter)
+    logger_to_file, logger_to_stdout = logger_activate(use_stdout, use_filter)
 
-    lru = LRUCache(3, logger=logger)
+    lru = LRUCache(3, logger=(logger_to_file, logger_to_stdout))
     lru.set("k1", "val1")  # set отсутствующего ключа
     lru.set("k2", "val2")  # set отсутствующего ключа
     lru.set("k3", "val3")  # set отсутствующего ключа

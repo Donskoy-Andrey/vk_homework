@@ -1,6 +1,5 @@
 from typing import Any
 from collections.abc import Hashable
-import logging
 
 
 class Node:
@@ -23,22 +22,28 @@ class LRUCache:
         self.tail = Node()
         self.head.next = self.tail
         self.tail.prev = self.head
-        self.logger = logger
+        self.logger_to_file = logger[0]
+        self.logger_to_stdout = logger[1]
+
 
     def get(self, key: Hashable):
         """
         Get value from cache.
         """
         if key not in self.storage:
-            if self.logger:
-                self.logger.warn("[get] : Key %s is not in cache.", key)
+            if self.logger_to_file:
+                self.logger_to_file.warn("[get] : Key %s is not in cache.", key)
+            if self.logger_to_stdout:
+                self.logger_to_stdout.warn("[get] : Key %s is not in cache.", key)
             return None
 
         node = self.storage[key]
         self.remove_node(node)
         self.add_node(node)
-        if self.logger:
-            self.logger.debug("[get] : Get value by key (%s) from cache", key)
+        if self.logger_to_file:
+            self.logger_to_file.debug("[get] : Get value by key (%s) from cache", key)
+        if self.logger_to_stdout:
+            self.logger_to_stdout.debug("[get] : Get value by key (%s) from cache", key)
         return node.value
 
     def set(self, key: Hashable, value: Any):
@@ -46,25 +51,39 @@ class LRUCache:
         Set value into cache.
         """
         if not isinstance(key, Hashable):
-            if self.logger:
-                self.logger.error(
+            if self.logger_to_file:
+                self.logger_to_file.error(
+                    "[set] : Key %s has unhashable type (%s)", key, type(key)
+                )
+            if self.logger_to_stdout:
+                self.logger_to_stdout.error(
                     "[set] : Key %s has unhashable type (%s)", key, type(key)
                 )
             raise TypeError(f"unhashable type: '{type(key)}'")
 
         if key in self.storage:
-            if self.logger:
-                self.logger.debug("[set] : Value by key %s is in cache.", key)
+            if self.logger_to_file:
+                self.logger_to_file.debug("[set] : Value by key %s is in cache.", key)
+            if self.logger_to_stdout:
+                self.logger_to_stdout.debug("[set] : Value by key %s is in cache.", key)
             node = self.storage[key]
             node.value = value
             self.remove_node(node)
             self.add_node(node)
         else:
-            if self.logger:
-                self.logger.debug("[set] : Value by key %s is not in cache.", key)
+            if self.logger_to_file:
+                self.logger_to_file.debug("[set] : Value by key %s is not in cache.", key)
+            if self.logger_to_stdout:
+                self.logger_to_stdout.debug("[set] : Value by key %s is not in cache.", key)
             if len(self.storage) >= self.limit:
-                if self.logger:
-                    self.logger.info(
+                if self.logger_to_file:
+                    self.logger_to_file.info(
+                        "[set] : Storage of cache is full. "
+                        "Remove last used element '%s'.",
+                        self.tail.prev.key
+                    )
+                if self.logger_to_stdout:
+                    self.logger_to_stdout.info(
                         "[set] : Storage of cache is full. "
                         "Remove last used element '%s'.",
                         self.tail.prev.key
